@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alpha-AI · Three products, one letter A</title>
+<meta name="description" content="Alpha-AI is building Todo-Task, Agent-Roster and TodoApp: three alpha-stage products that run locally on your machine and on iPhone.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Alpha-AI · Three products, one letter A">
+<meta property="og:description" content="Todo-Task, Agent-Roster and TodoApp: three Alpha-AI products in development.">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#E8EAEC">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+/* Geist Variable, local files only. */
+@font-face{font-family:"Geist Variable";font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/geist-vietnamese-wght-normal.woff2) format("woff2-variations");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Geist Variable";font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/geist-latin-ext-wght-normal.woff2) format("woff2-variations");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Geist Variable";font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/geist-latin-wght-normal.woff2) format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{
+  --sc-canvas:#E8EAEC; --sc-surface:#F3F4F5; --sc-ink:#15171A; --sc-ink-soft:#454A52;
+  --sc-accent:#FF4500; --sc-accent-ink:#15171A;
+  --sc-font-display:"Geist Variable",system-ui,sans-serif;
+  --sc-font-text:"Geist Variable",system-ui,sans-serif;
+  --sc-shadow-color:215 18% 14%;
+  --orange:#FF4500;
+  --r:12px; --r-sm:8px;
+}
+html{background:#E8EAEC}
+/* Hard-cut grounds. Each section restates colour as well as the tokens. */
+.g-paper{--bg:#E8EAEC;--fg:#15171A;--fg-soft:#454A52;--acc:#B33300;--ring:#B33300;--line:rgba(21,23,26,.2)}
+.g-night{--bg:#111214;--fg:#F1F0EE;--fg-soft:#A9ABB0;--acc:#FF4500;--ring:#FF7A45;--line:rgba(241,240,238,.22);--sc-shadow-color:0 0% 0%}
+.g-mist{--bg:#D6D9DE;--fg:#15171A;--fg-soft:#3F444B;--acc:#B33300;--ring:#B33300;--line:rgba(21,23,26,.24)}
+.g-paper,.g-night,.g-mist{background:var(--bg);color:var(--fg);--sc-ink:var(--fg);--sc-ink-soft:var(--fg-soft)}
+.g-paper :focus-visible,.g-night :focus-visible,.g-mist :focus-visible,.folio :focus-visible{outline:2px solid var(--ring);outline-offset:3px;border-radius:var(--r-sm)}
+h1,h2,h3{font-family:var(--sc-font-display);font-weight:640;letter-spacing:-.035em;text-wrap:balance;margin:0}
+p{margin:0}
+.nb{white-space:nowrap}
+.sc-body{color:var(--fg-soft)}
+
+/* ---- folio: the margin chrome. A small solid plate that takes the ground. */
+.folio{position:fixed;left:clamp(.75rem,2.4vw,2rem);top:clamp(.75rem,2.2vh,1.5rem);z-index:60;display:flex;align-items:center;gap:.6rem;
+  padding:.4rem .75rem .4rem .55rem;border-radius:var(--r-sm);background:var(--fb,#E8EAEC);color:var(--ff,#15171A);font-size:var(--sc-t-sm);line-height:1.2;transition:background-color .18s,color .18s}
+.folio a{display:flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:650;letter-spacing:-.01em}
+.folio svg{width:1.45rem;height:1.2rem;fill:var(--orange)}
+.folio__ch{color:var(--fs,#454A52);padding-left:.6rem;border-left:1px solid var(--fl,rgba(21,23,26,.25));white-space:nowrap}
+body{--ring:#B33300}
+body[data-ground="night"]{--ring:#FF7A45;--fb:#111214;--ff:#F1F0EE;--fs:#A9ABB0;--fl:rgba(241,240,238,.3)}
+body[data-ground="mist"]{--fb:#D6D9DE;--ff:#15171A;--fs:#3F444B;--fl:rgba(21,23,26,.3)}
+@media (max-width:560px){.folio__ch{max-width:48vw;overflow:hidden;text-overflow:ellipsis}}
+
+.cta{display:inline-flex;align-items:center;min-height:3rem;padding:.8rem 1.35rem;background:var(--orange);color:#15171A;font-weight:650;letter-spacing:-.01em;text-decoration:none;border-radius:var(--r-sm);
+  transition:transform .14s var(--sc-ease-out),background-color .14s}
+.cta:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.cta:hover{background:#FF5C1F;transform:translateY(-1px)}}
+
+/* ---------------- 1. title page */
+.hero{position:relative;min-height:100svh;overflow:clip;display:flex;align-items:center}
+.hero__art{position:absolute;right:-12vw;bottom:-14vh;width:min(72vw,125vh);aspect-ratio:52.6/44.8;pointer-events:none}
+.hero__art--back{z-index:0}
+.hero__art--front{z-index:3}
+.hero__art svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:var(--orange)}
+.hero{--t:max(0, calc((var(--sc-p, .5) - .5) * 2))}
+.hero__leg{transform:translate(4%,5%) rotate(5deg)}
+.hero__body{transform:none}
+@media (prefers-reduced-motion:no-preference){
+  .hero__leg{transform:translate(calc(4% + var(--t) * 16%),calc(5% + var(--t) * 24%)) rotate(calc(5deg + var(--t) * 14deg))}
+  .hero__body{transform:translate(calc(var(--t) * -4%),0)}
+}
+.hero__copy{position:relative;z-index:2;width:100%;max-width:calc(min(44rem,56vw) + var(--sc-gutter) * 2);padding:7rem var(--sc-gutter) 5rem}
+.hero h1{font-size:clamp(2.7rem,1.1rem + 6.4vw,7rem);line-height:1.04;max-width:15ch}
+.hero__sub{margin-top:1.75rem;font-size:var(--sc-t-lg);line-height:1.45;max-width:30ch;color:var(--fg)}
+.hero .cta{margin-top:2.25rem}
+@media (max-width:860px){
+  .hero{align-items:flex-start}
+  .hero__copy{max-width:none;padding:6.25rem var(--sc-gutter) 0}
+  .hero h1{font-size:clamp(2.6rem,12.4vw,4.2rem);max-width:9ch}
+  .hero__sub{margin-top:1.25rem;font-size:1.05rem;max-width:26ch}
+  .hero .cta{margin-top:1.5rem}
+  .hero__art{right:-44vw;bottom:-7vh;width:158vw}
+}
+@media (max-width:860px) and (max-height:700px){
+  .hero__art{bottom:-24vh;width:140vw;right:-48vw}
+}
+
+/* ---------------- 2. peak */
+.peak__stage{background:#111214;color:#F1F0EE}
+.peak__stage{display:flex;flex-direction:column;justify-content:center;padding:0 var(--sc-gutter)}
+.names{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:clamp(1.2rem,4vh,2.6rem);position:relative;z-index:1}
+.name-row{display:grid;grid-template-columns:1fr minmax(12rem,22vw);align-items:end;gap:2rem;opacity:var(--vis,0)}
+.name-row h3{font-size:clamp(2rem,7.2vw,7.4rem);font-weight:720;letter-spacing:-.04em;line-height:.95;text-transform:uppercase;color:var(--fg);opacity:calc(.48 + .52 * var(--lit,0));white-space:nowrap}
+.name-row p{font-size:var(--sc-t-sm);color:var(--fg-soft);opacity:var(--lit,0);max-width:30ch;padding-bottom:.4em}
+.slot{display:inline-block;width:.835em;height:.71em;vertical-align:baseline;position:relative;margin-inline:.015em}
+.slot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.slot .ghost{fill:none;stroke:var(--fg-soft);stroke-width:.7;opacity:.7}
+.slot .fill{fill:var(--orange);fill-opacity:0;transition:fill-opacity .16s}
+.slot.is-set .fill{fill-opacity:1}
+.slot.is-set .ghost{opacity:0}
+.trav{position:absolute;left:0;top:0;z-index:5;pointer-events:none;transform-origin:50% 50%;will-change:transform;overflow:visible;fill:var(--orange)}
+.trav--leg{z-index:6}
+.trav{filter:drop-shadow(0 .55rem .7rem rgba(0,0,0,.5))}
+.peak__line{position:absolute;left:var(--sc-gutter);right:var(--sc-gutter);bottom:clamp(2.5rem,9vh,6rem);z-index:2;font-size:var(--sc-t-xl);letter-spacing:-.025em;line-height:1.2;max-width:28ch;font-weight:560;color:var(--fg)}
+.peak__line--end{max-width:36ch;font-size:var(--sc-t-lg);font-weight:520}
+@media (max-width:860px){
+  .name-row{grid-template-columns:1fr;gap:.5rem}
+  .name-row h3{font-size:11.4vw}
+  .name-row p{padding:0;font-size:.9rem;max-width:34ch}
+  .names{gap:1.4rem;transform:translateY(-4svh)}
+  .peak__line{font-size:1.45rem;bottom:2rem;top:auto}
+  .peak__line--end{font-size:1.05rem;bottom:1.6rem}
+}
+@media (prefers-reduced-motion:reduce){.trav{display:none}.slot .fill{transition:none}.peak__line--start{display:none}}
+
+/* ---------------- 3. Todo-Task rail */
+#todo-task .sc-stage{display:flex;align-items:center}
+.rail{--rh:clamp(15rem,56vh,34rem);display:flex;align-items:center;gap:clamp(2rem,4vw,3.5rem);padding:5.5rem var(--sc-gutter) 3rem;width:max-content;min-width:100%}
+.rail>*{flex:none}
+.rail__intro{width:min(34rem,82vw)}
+.rail__intro img{height:clamp(3.2rem,8vh,5rem);width:auto;max-width:100%;margin-bottom:2rem}
+.rail__intro h2{font-size:var(--sc-t-2xl);line-height:1.06}
+.rail__intro .sc-body{margin-top:1.1rem}
+.rail__intro .note{margin-top:1.4rem;font-size:var(--sc-t-sm);color:var(--fg-soft)}
+.note .crop{display:none}
+@media (max-width:860px){.note .crop{display:inline}}
+.shot{margin:0}
+.shot__frame{border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:var(--sc-e2);border:1px solid var(--line)}
+.shot__frame img{display:block;height:var(--rh);width:auto;max-width:none}
+.shot figcaption{margin-top:.85rem;font-size:var(--sc-t-sm);color:var(--fg-soft);max-width:46ch}
+.shot figcaption b{color:var(--fg);font-weight:620}
+.rail__end{width:min(24rem,80vw)}
+.rail__end p+p{margin-top:1rem}
+.views{list-style:none;padding:0;margin:1.25rem 0 0;display:flex;flex-wrap:wrap;gap:.4rem .5rem}
+.views li{font-size:var(--sc-t-sm);padding:.2rem .6rem;border:1px solid var(--line);border-radius:999px;color:var(--fg)}
+@media (max-width:860px){
+  .rail{padding-top:4.75rem;gap:1.75rem}
+  .shot__frame{width:86vw;height:54svh}
+  .shot__frame img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,0 0)}
+  .shot figcaption{max-width:86vw}
+  .rail__intro h2{font-size:1.75rem}
+  .rail__intro img{height:2.6rem;margin-bottom:1.25rem}
+}
+
+/* ---------------- intro videos: native <video>, a real Play/Pause button under it */
+.vid{margin:0}
+.vid__box{position:relative;overflow:hidden;border-radius:var(--r);aspect-ratio:16/9;background:#111214;border:1px solid var(--line);box-shadow:var(--sc-e2)}
+.vid__box video{display:block;width:100%;height:100%;object-fit:contain;background:#111214}
+.vid__cap{display:flex;flex-wrap:wrap;align-items:flex-start;gap:.75rem 1rem;margin-top:.85rem;font-size:var(--sc-t-sm);color:var(--fg-soft)}
+.vid__cap p{flex:1 1 16rem;max-width:56ch}
+.vid__btn{flex:none;display:inline-flex;align-items:center;gap:.55rem;min-height:2.75rem;padding:.4rem 1rem .4rem .85rem;border:1.5px solid var(--fg);border-radius:var(--r-sm);background:transparent;color:var(--fg);font:inherit;font-weight:620;letter-spacing:-.005em;cursor:pointer;transition:background-color .14s,color .14s}
+.vid__btn svg{width:.9rem;height:.9rem;fill:currentColor}
+.vid__btn .i-pause{display:none}
+.vid__btn[data-state="playing"] .i-play{display:none}
+.vid__btn[data-state="playing"] .i-pause{display:block}
+@media (hover:hover) and (pointer:fine){.vid__btn:hover{background:var(--fg);color:var(--bg)}}
+.shot--vid .vid__box{height:var(--rh);width:calc(var(--rh) * 16 / 9);aspect-ratio:auto}
+.shot--vid{width:calc(var(--rh) * 16 / 9)}
+.shot--vid .vid__cap p{max-width:46ch}
+.intro-vid .sc-body+.sc-body{margin-top:.9rem}
+.intro-vid .split__media{grid-column:6 / span 7}
+.intro-vid .split__text{grid-column:1 / span 4}
+@media (max-width:860px){
+  .shot--vid{width:86vw}
+  .shot--vid .vid__box{width:86vw;height:auto;aspect-ratio:16/9}
+}
+
+/* Agent-Roster: narrow-screen shots in plain rounded frames, plus one wide panel */
+.ar-block{margin-top:clamp(3.5rem,9vh,6rem)}
+.ar-label{font-size:var(--sc-t-sm);color:var(--fg-soft);max-width:60ch}
+.phones{display:flex;justify-content:center;align-items:flex-start;gap:clamp(1.25rem,3.5vw,3.5rem);margin:1.6rem 0 0;padding:0 0 2.5rem;list-style:none}
+.pframe{margin:0;width:min(17rem,27vw)}
+.pframe__box{border-radius:2rem;overflow:hidden;aspect-ratio:430/932;border:1px solid var(--line);box-shadow:var(--sc-e3);background:#fdfaf4}
+.pframe__box img{display:block;width:100%;height:100%;object-fit:cover}
+.pframe figcaption{margin-top:.8rem;font-size:var(--sc-t-sm);color:var(--fg-soft)}
+.pframe figcaption b{color:var(--fg);font-weight:620}
+.panel__h{font-size:var(--sc-t-xl);line-height:1.12}
+.split--panel .split__text{grid-column:1 / span 5}
+.split--panel .split__media{grid-column:7 / span 6}
+.panel__box{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);box-shadow:var(--sc-e3);background:#fdfaf4}
+.panel__box img{display:block;width:100%;height:auto}
+@media (max-width:860px){
+  .phones{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.1rem;margin-inline:calc(var(--sc-gutter) * -1);padding:0 var(--sc-gutter) 1.4rem;scroll-padding-inline:var(--sc-gutter);-webkit-overflow-scrolling:touch}
+  .pframe{flex:none;width:min(15.5rem,66vw);scroll-snap-align:start}
+  .split--panel .split__media{margin-top:1.75rem}
+}
+
+/* ---------------- 4/5. split chapters */
+.chapter{padding:calc(var(--sc-section) * .9) 0}
+.split{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(1rem,3vw,3rem);align-items:center}
+.split__text{grid-column:1 / span 5}
+.split__media{grid-column:7 / span 6}
+.chapter h2{font-size:var(--sc-t-2xl);line-height:1.08}
+.chapter .sc-body{margin-top:1.2rem}
+.chapter .wm{height:clamp(2.2rem,5vh,3.2rem);width:auto;margin-bottom:2rem}
+.facts{list-style:none;margin:1.8rem 0 0;padding:0;border-top:1px solid var(--line)}
+.facts li{padding:.85rem 0;border-bottom:1px solid var(--line);color:var(--fg);font-size:var(--sc-t-base);max-width:52ch}
+.frame{margin:0}
+.frame__box{position:relative;overflow:clip;border-radius:var(--r);aspect-ratio:16/10;box-shadow:var(--sc-e3);border:1px solid var(--line);background:#1a1612}
+.frame__box .plx{position:absolute;inset:-7% 0}
+.frame__box img{width:100%;height:100%;object-fit:cover}
+.frame figcaption{margin-top:.8rem;font-size:var(--sc-t-sm);color:var(--fg-soft)}
+.phone{margin:0 auto;width:min(19rem,64vw)}
+.phone__box{border-radius:2.1rem;overflow:hidden;aspect-ratio:390/844;border:1px solid var(--line);box-shadow:var(--sc-e3);background:#e3e5e8}
+.phone__box img{width:100%;height:100%;object-fit:cover}
+.phone figcaption{margin-top:.9rem;font-size:var(--sc-t-sm);color:var(--fg-soft);text-align:center}
+.split--phone .split__media{grid-column:2 / span 4;order:-1}
+.split--phone .split__text{grid-column:7 / span 5}
+.app-icon{display:block;width:5rem;height:5rem;margin-bottom:1.1rem;filter:drop-shadow(0 6px 14px rgba(0,0,0,.28))}
+.app-icon--sm{display:inline-block;width:1.9rem;height:1.9rem;margin:0 .55rem 0 0;vertical-align:-.35em;filter:drop-shadow(0 1px 3px rgba(0,0,0,.25))}
+.callout{margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--line);font-size:var(--sc-t-sm);color:var(--fg-soft)}
+@media (max-width:860px){
+  .chapter{padding:4.5rem 0 4rem}
+  .split{display:block}
+  .split__media{margin-top:2.25rem}
+  .split--phone .split__media{margin:0 0 2.25rem}
+  .split--phone .split__text{margin:0}
+  .chapter h2{font-size:1.85rem}
+  .frame__box{aspect-ratio:4/3}
+}
+
+/* ---------------- 6. fit diagram */
+.fit{display:flex;flex-direction:column;justify-content:center;padding:5.5rem var(--sc-gutter) 2rem;gap:clamp(1.2rem,3vh,2.2rem)}
+.fit h2{font-size:var(--sc-t-2xl);max-width:20ch;line-height:1.06}
+.plot{position:relative;display:grid;grid-template-columns:1fr 1fr;row-gap:clamp(2.6rem,9vh,5.5rem);column-gap:clamp(5rem,15vw,15rem);max-width:60rem;width:100%;padding-top:2.4rem}
+.node{position:relative;z-index:2;padding:1rem 1.2rem;border:1px solid var(--fg);border-radius:var(--r);background:var(--bg)}
+.node h3{font-size:var(--sc-t-lg);letter-spacing:-.02em}
+.node p{margin-top:.25rem;font-size:var(--sc-t-sm);color:var(--fg-soft)}
+#n-ta{grid-column:1 / -1;justify-self:center;width:calc(50% - 1rem)}
+.plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:1}
+.edge{fill:none;stroke:var(--acc);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1;stroke-linecap:round}
+.head{fill:var(--acc);opacity:0}
+.zone{fill:none;stroke:var(--fg-soft);stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:1}
+.elabel{position:absolute;z-index:3;transform:translate(-50%,-50%);font-size:var(--sc-t-sm);color:var(--fg);background:var(--bg);padding:.1rem .45rem;opacity:0;white-space:nowrap;border-radius:4px}
+.elabel--zone{transform:none;background:none;color:var(--fg-soft);padding:0}
+.fit__note{max-width:64ch;font-size:var(--sc-t-sm)}
+@media (max-width:860px){
+  .fit{padding:4.75rem var(--sc-gutter) 1rem;gap:.9rem}
+  .fit h2{font-size:1.6rem}
+  .plot{grid-template-columns:1fr;row-gap:3rem;padding:1.9rem 0 0 2.6rem;max-width:none}
+  #n-ta{width:auto;justify-self:stretch}
+  .node{padding:.65rem .9rem}
+  .node p{font-size:.85rem}
+  .fit__note{font-size:.82rem;line-height:1.45}
+  .elabel{font-size:.78rem}
+}
+@media (prefers-reduced-motion:reduce){.edge,.zone{stroke-dashoffset:0}.head{opacity:1}.elabel{opacity:1}}
+
+/* ---------------- 7. colophon */
+.close{min-height:100svh;display:flex;align-items:center}
+.close .sc-wrap{display:grid;grid-template-columns:auto 1fr;gap:clamp(2rem,6vw,6rem);align-items:center}
+.whole{width:clamp(9rem,20vw,17rem);aspect-ratio:52.6/44.8;position:relative}
+.whole svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:var(--orange)}
+.whole .l{transform:translate(9%,11%) rotate(9deg);transition:transform 1.1s var(--sc-ease-out) .15s}
+.whole .b{transform:translate(-3%,-3%);transition:transform 1.1s var(--sc-ease-out)}
+.whole.is-whole .l,.whole.is-whole .b{transform:none}
+@media (prefers-reduced-motion:reduce){.whole .l,.whole .b{transform:none;transition:none}}
+.close h2{font-size:var(--sc-t-2xl);line-height:1.08;max-width:18ch}
+.close .sc-body{margin-top:1.2rem;font-size:var(--sc-t-base)}
+.close a.run{color:var(--fg);font-weight:600;text-underline-offset:.25em;text-decoration-thickness:1.5px}
+@media (hover:hover) and (pointer:fine){.close a.run:hover{color:var(--acc)}}
+.close .small{margin-top:2.2rem;padding-top:1.2rem;border-top:1px solid var(--line);font-size:var(--sc-t-sm);color:var(--fg-soft);max-width:60ch}
+@media (max-width:860px){
+  .close .sc-wrap{grid-template-columns:1fr;gap:2rem}
+  .whole{width:8.5rem}
+  .close h2{font-size:1.8rem}
+}
+/* reduced motion: the whole page is settled, flow, and the rail becomes a plain grid */
+@media (prefers-reduced-motion:reduce){
+  .peak__stage,.fit{min-height:100svh;position:relative}
+  #todo-task .rail{width:100%;min-width:0;flex-wrap:wrap;align-items:flex-start;gap:3rem 3rem;padding-top:6rem;padding-bottom:5rem}
+  #todo-task .rail__intro{width:min(40rem,100%);flex-basis:100%}
+  #todo-task .shot{width:min(46rem,100%);flex:1 1 22rem}
+  #todo-task .shot__frame{width:auto;height:auto}
+  #todo-task .shot__frame img{width:100%;height:auto;object-fit:initial}
+  #todo-task .shot figcaption{max-width:none}
+  #todo-task .shot--vid{width:min(46rem,100%)}
+  #todo-task .shot--vid .vid__box{width:100%;height:auto;aspect-ratio:16/9}
+}
+</style>
+<noscript><style>[data-sc-cue],[data-sc-in],[data-sc-stagger]>*{opacity:1!important;transform:none!important}.name-row{--vis:1;--lit:1}</style></noscript>
+</head>
+<body data-ground="paper">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="p-body" d="M7.56,44.737 C20.509,34.609 31.755,27.804 41.287,24.321 L27.824,0 L15.285,22.736 L27.069,17.658 C16.517,27.04 7.489,36.063 0,44.737 L7.56,44.737Z"/>
+    <path id="p-leg" d="M36.007,30.739 L45.6,44.737 L52.533,44.623 L43.014,27.436 C40.768,28.361 38.432,29.466 36.007,30.739Z"/>
+  </defs>
+</svg>
+
+<span data-sc-progress aria-hidden="true" hidden></span>
+<div class="sc-grain" aria-hidden="true"></div>
+
+<header class="folio">
+  <a href="#top" aria-label="Alpha-AI, back to top">
+    <svg viewBox="0 0 52.6 44.8" aria-hidden="true"><use href="#p-body"/><use href="#p-leg"/></svg>
+    <span>Alpha-AI</span>
+  </a>
+  <span class="folio__ch" id="folio-ch">Alpha stage</span>
+</header>
+
+<main>
+
+  <!-- 1. TITLE PAGE: layered shards, type between them -->
+  <section class="hero g-paper" id="top" data-sc-act="flow" data-chapter="Alpha stage" data-ground="paper">
+    <div class="hero__art hero__art--back" data-sc-parallax="-1.1" aria-hidden="true">
+      <svg class="hero__body" viewBox="0 0 52.6 44.8"><use href="#p-body"/></svg>
+    </div>
+    <div class="hero__copy">
+      <h1>Three products, one letter A.</h1>
+      <p class="hero__sub">Alpha-AI is building <span class="nb">Todo-Task</span>, <span class="nb">Agent-Roster</span> and TodoApp. All three are in alpha and still in development.</p>
+      <a class="cta" href="#todo-task">Explore the products</a>
+    </div>
+    <div class="hero__art hero__art--front" data-sc-parallax="1.6" aria-hidden="true">
+      <svg class="hero__leg" viewBox="0 0 52.6 44.8"><use href="#p-leg"/></svg>
+    </div>
+  </section>
+
+  <!-- 1b. QUICK LOOK: the short Alpha-AI intro video (flow, no scrub) -->
+  <section id="intro" class="chapter intro-vid g-mist" data-sc-act="flow" data-chapter="Quick look" data-ground="mist">
+    <div class="sc-wrap split">
+      <div class="split__text" data-sc-in data-sc-stagger="70">
+        <h2>All three at a glance, in eighteen seconds.</h2>
+        <p class="sc-body">A short silent video with on-screen captions. It plays by itself only while it is in view, and never if you have reduced motion turned on. The button below lets you play or pause at any time.</p>
+      </div>
+      <figure class="split__media vid">
+        <div class="vid__box">
+          <video data-intro muted playsinline loop preload="metadata" poster="assets/alpha-ai-intro.webp" width="1920" height="1080" aria-label="Intro video for Alpha-AI and its three products, no sound, English captions"><source src="assets/alpha-ai-intro.mp4" type="video/mp4"></video>
+        </div>
+        <figcaption class="vid__cap">
+          <button class="vid__btn" type="button" data-label="the Alpha-AI intro video"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="i-play" d="M1.5 0.5 L9 5 L1.5 9.5Z"/><path class="i-pause" d="M1.5 0.5h2.5v9h-2.5zM6 0.5h2.5v9h-2.5z"/></svg><span class="vid__lab">Play</span></button>
+          <p>18-second video: the letter A assembles from its shards, then hops into the three product names with a line about each: <span class="nb">Todo-Task</span> (tasks, calendar and mail on your own machine), <span class="nb">Agent-Roster</span> (a small team of AI agents that report back to you) and TodoApp (both on iPhone). All three are in alpha.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. PEAK: the A travels -->
+  <section id="peak" class="g-night" data-sc-act="pin" data-sc-span="5.2" data-chapter="Three names" data-ground="night">
+    <div data-sc-stage class="peak__stage" data-sc-verify-state="">
+      <p class="peak__line peak__line--start" data-sc-cue="0 0.06 0 0.1">Look at their names.</p>
+      <ol class="names">
+        <li class="name-row">
+          <h3 aria-label="Todo-Task"><span aria-hidden="true">TODO-T<span class="slot"><svg viewBox="0 0 52.6 44.8"><use class="ghost" href="#p-body"/><use class="ghost" href="#p-leg"/><use class="fill" href="#p-body"/><use class="fill" href="#p-leg"/></svg></span>SK</span></h3>
+          <p>A local task board for Jira-style work.</p>
+        </li>
+        <li class="name-row">
+          <h3 aria-label="Agent-Roster"><span aria-hidden="true"><span class="slot"><svg viewBox="0 0 52.6 44.8"><use class="ghost" href="#p-body"/><use class="ghost" href="#p-leg"/><use class="fill" href="#p-body"/><use class="fill" href="#p-leg"/></svg></span>GENT-ROSTER</span></h3>
+          <p>A small team of AI agents running locally.</p>
+        </li>
+        <li class="name-row">
+          <h3 aria-label="TodoApp"><span aria-hidden="true">TODO<span class="slot"><svg viewBox="0 0 52.6 44.8"><use class="ghost" href="#p-body"/><use class="ghost" href="#p-leg"/><use class="fill" href="#p-body"/><use class="fill" href="#p-leg"/></svg></span>PP</span></h3>
+          <p>The companion iPhone app.</p>
+        </li>
+      </ol>
+      <svg class="trav trav--body" viewBox="0 0 52.6 44.8" aria-hidden="true"><use href="#p-body"/></svg>
+      <svg class="trav trav--leg" viewBox="0 0 52.6 44.8" aria-hidden="true"><use href="#p-leg"/></svg>
+      <p class="peak__line peak__line--end" data-sc-cue="0.88 0.99 0.05 0.02">Every name carries the A of Alpha-AI.</p>
+    </div>
+  </section>
+
+  <!-- 3. CHAPTER 1: Todo-Task, lateral rail of real screenshots -->
+  <section id="todo-task" class="g-paper" data-sc-act="pan" data-sc-span="3.8" data-chapter="Chapter 1 · Todo-Task" data-ground="paper">
+    <div data-sc-stage>
+      <div class="rail" data-sc-pan="0.04">
+        <div class="rail__intro">
+          <img src="assets/todo-task-wordmark.webp" width="900" height="255" alt="Todo-Task">
+          <h2>A Jira-style task board that runs on your own machine.</h2>
+          <p class="sc-body"><span class="nb">Todo-Task</span> brings your work into one local dashboard, with local projects that have To do, Doing and Done boards.</p>
+          <p class="note">Every screenshot in this chapter uses sample data. <span class="crop">Images are cropped for small screens.</span></p>
+        </div>
+        <figure class="shot shot--vid vid">
+          <div class="vid__box">
+            <video data-intro muted playsinline loop preload="metadata" poster="assets/todo-task-intro.webp" width="1920" height="1080" aria-label="Todo-Task intro video, no sound, English captions, sample data"><source src="assets/todo-task-intro.mp4" type="video/mp4"></video>
+          </div>
+          <figcaption class="vid__cap">
+            <button class="vid__btn" type="button" data-label="the Todo-Task intro video"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="i-play" d="M1.5 0.5 L9 5 L1.5 9.5Z"/><path class="i-pause" d="M1.5 0.5h2.5v9h-2.5zM6 0.5h2.5v9h-2.5z"/></svg><span class="vid__lab">Play</span></button>
+            <p>27-second video, sample data: Overview, the Board, a task drawer with a checklist, a quick look at Mail, Habits and the Launch plan board, then the Agents screen.</p>
+          </figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame"><img src="assets/tt-overview.webp" width="1600" height="1000" alt="Todo-Task Overview screen: priority queue, today's calendar, habits, progress and latest activity, with the sample project harbor-notes" loading="lazy"></div>
+          <figcaption><b>Overview.</b> Priority queue, today's calendar, habits and latest activity. Sample data.</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame"><img src="assets/tt-board.webp" width="1600" height="1000" alt="Todo-Task Board: sample task cards arranged in status columns such as Open, In Progress and Code Review" loading="lazy"></div>
+          <figcaption><b>Board.</b> Tasks arranged in status columns. Sample data.</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame" style="--pos:100% 0"><img src="assets/tt-task-detail.webp" width="1600" height="1000" alt="Task detail drawer open on the right of the board: description, agent assignment, merge request and AI insight, sample data" loading="lazy"></div>
+          <figcaption><b>Task detail.</b> Description, agent assignment, merge request, AI insight. Sample data.</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame"><img src="assets/tt-mail.webp" width="1600" height="1000" alt="Todo-Task Mail screen: Work and Personal inboxes with sample messages and a sample daily digest" loading="lazy"></div>
+          <figcaption><b>Mail.</b> Work and personal inboxes next to your tasks. Sample data.</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame"><img src="assets/tt-habits.webp" width="1600" height="1000" alt="Todo-Task Habits screen: four sample habits with streak history" loading="lazy"></div>
+          <figcaption><b>Habits.</b> Daily habits and streaks. Sample data.</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame"><img src="assets/tt-local-project-board.webp" width="1600" height="1000" alt="Local project board Launch plan with To do, Doing and Done columns and six sample cards" loading="lazy"></div>
+          <figcaption><b>Local project.</b> A To do, Doing, Done board. Sample data.</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="shot__frame"><img src="assets/tt-agents-workspace.webp" width="1600" height="1000" alt="Agents screen in Todo-Task: agent list on the left, one agent's observed activity on the right, sample data" loading="lazy"></div>
+          <figcaption><b>Agents.</b> The agent team as seen from inside <span class="nb">Todo-Task</span>. Sample data.</figcaption>
+        </figure>
+        <div class="rail__end">
+          <p class="sc-body">Jira and Confluence are accessed read-only.</p>
+          <ul class="views" aria-label="Todo-Task screens">
+            <li>Overview</li><li>Board</li><li>List</li><li>History</li><li>Activity</li><li>Calendar</li><li>Mail</li><li>Habits</li><li>Agents</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CHAPTER 2: Agent-Roster -->
+  <section id="agent-roster" class="chapter g-night" data-sc-act="flow" data-chapter="Chapter 2 · Agent-Roster" data-ground="night">
+    <div class="sc-wrap split">
+      <div class="split__text" data-sc-in data-sc-stagger="70">
+        <img class="wm" src="assets/agent-roster-wordmark.webp" width="1000" height="136" alt="Agent-Roster" loading="lazy">
+        <h2>A small team of AI agents, working right in your terminal.</h2>
+        <p class="sc-body"><span class="nb">Agent-Roster</span> is made up of a BA, a CTO and Managers. They run locally in terminal panes, take assignments, ask each other questions under set rules, and report back.</p>
+        <ul class="facts">
+          <li>One local server is the only place agent state is written.</li>
+          <li>Guardrails block risky file and git operations.</li>
+          <li>An analyst agent flags work that is blocked.</li>
+          <li>Listens on loopback only.</li>
+        </ul>
+      </div>
+      <figure class="split__media vid">
+        <div class="vid__box">
+          <video data-intro muted playsinline loop preload="metadata" poster="assets/agent-roster-intro.webp" width="1920" height="1080" aria-label="Agent-Roster intro video, no sound, English captions, sample data"><source src="assets/agent-roster-intro.mp4" type="video/mp4"></video>
+        </div>
+        <figcaption class="vid__cap">
+          <button class="vid__btn" type="button" data-label="the Agent-Roster intro video"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="i-play" d="M1.5 0.5 L9 5 L1.5 9.5Z"/><path class="i-pause" d="M1.5 0.5h2.5v9h-2.5zM6 0.5h2.5v9h-2.5z"/></svg><span class="vid__lab">Play</span></button>
+          <p>26-second video, sample data: the whole team and the "Needs you" list, assigning work then reviewing and confirming it, chatting with an agent, an activity preview, and the settings you control.</p>
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="sc-wrap ar-block">
+      <p class="ar-label">Screenshots of the real interface with sample data, at a narrow screen size. The rounded frames are illustrative only, not a specific device.</p>
+      <div class="phones" role="group" aria-label="Three screenshots of the Agent-Roster interface at a narrow screen size" tabindex="0">
+        <figure class="pframe" data-sc-parallax="-0.7">
+          <div class="pframe__box"><img src="assets/ar-team.webp" width="800" height="1734" alt="Agent-Roster Board tab: the Needs you section, a workflow breakdown and an agent list including Linh, sample data" loading="lazy"></div>
+          <figcaption><b>Board.</b> The whole team and what needs you.</figcaption>
+        </figure>
+        <figure class="pframe" data-sc-parallax="0.9">
+          <div class="pframe__box"><img src="assets/ar-tasks.webp" width="800" height="1734" alt="Agent-Roster Tasks tab: an assignment form and a task waiting for you to press Confirm Done or Fail, sample data" loading="lazy"></div>
+          <figcaption><b>Tasks.</b> Assign, review, confirm.</figcaption>
+        </figure>
+        <figure class="pframe" data-sc-parallax="-1.4">
+          <div class="pframe__box"><img src="assets/ar-chat.webp" width="800" height="1734" alt="Agent-Roster Chat tab: a conversation with the agent Bao, with project details for harbor-notes, sample data" loading="lazy"></div>
+          <figcaption><b>Chat.</b> Talk to an agent.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sc-wrap ar-block">
+      <div class="split split--panel">
+        <div class="split__text" data-sc-in data-sc-stagger="70">
+          <h3 class="panel__h">See what an agent is doing.</h3>
+          <p class="sc-body">Agent details shows an agent's current task, confirmed context, activity history and a preview of its current session.</p>
+          <p class="callout">Screenshot of the real interface with sample data.</p>
+        </div>
+        <figure class="split__media frame">
+          <div class="panel__box"><img src="assets/ar-activity.webp" width="1200" height="1324" alt="Agent-Roster Agent details: the current task DEMO-101, context, activity history and session preview, sample data" loading="lazy"></div>
+          <figcaption>Agent details: Activity, Context and Preview for a sample agent.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CHAPTER 3: TodoApp -->
+  <section id="todoapp" class="chapter g-mist" data-sc-act="flow" data-chapter="Chapter 3 · TodoApp" data-ground="mist">
+    <div class="sc-wrap split split--phone">
+      <figure class="split__media phone" data-sc-reveal="iris" data-sc-reveal-at="0.12 0.5">
+        <div class="phone__box"><img src="assets/todoapp-pending.svg" width="390" height="844" alt="Placeholder for TodoApp screenshots. App screenshots coming soon." loading="lazy"></div>
+        <figcaption>TodoApp screenshots coming soon. A placeholder, not the real interface.</figcaption>
+      </figure>
+      <div class="split__text" data-sc-in data-sc-stagger="70">
+        <img class="app-icon" src="assets/todoapp-icon.webp" width="512" height="512" alt="TodoApp app icon" loading="lazy">
+        <h2>TodoApp: <span class="nb">Todo-Task</span> and <span class="nb">Agent-Roster</span>, on your iPhone.</h2>
+        <p class="sc-body">TodoApp is the companion SwiftUI app. It mirrors the other two products on your phone and shows conversations between agents as chat.</p>
+        <ul class="facts">
+          <li>Commands sent back to your machine are limited to an allow-list, through a local bridge.</li>
+          <li>Sign-in is required, with a single account.</li>
+        </ul>
+        <p class="callout">The icon above is the real TodoApp icon on iPhone. App screenshots are still pending and will be added.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. HOW THEY FIT: the diagram draws itself -->
+  <section id="fit" class="g-paper" data-sc-act="pin" data-sc-span="2.4" data-chapter="How they fit together" data-ground="paper">
+    <div data-sc-stage class="fit" data-sc-verify-state="">
+      <h2>How the three products fit together.</h2>
+      <div class="plot" id="plot">
+        <svg aria-hidden="true">
+          <rect id="zone" class="zone" pathLength="1" rx="14"/>
+          <path id="e-a" class="edge" pathLength="1"/><path id="h-a" class="head"/>
+          <path id="e-b" class="edge" pathLength="1"/><path id="h-b" class="head"/>
+          <path id="e-c" class="edge" pathLength="1"/><path id="h-c" class="head"/>
+        </svg>
+        <div class="node" id="n-tt"><h3><span class="nb">Todo-Task</span></h3><p>Where the work is managed.</p></div>
+        <div class="node" id="n-ar"><h3><span class="nb">Agent-Roster</span></h3><p>Agents take work from <span class="nb">Todo-Task</span>.</p></div>
+        <div class="node" id="n-ta"><h3><img class="app-icon app-icon--sm" src="assets/todoapp-icon.webp" width="512" height="512" alt="" loading="lazy">TodoApp</h3><p>Mirrors both on iPhone.</p></div>
+        <p class="elabel" id="l-a">assigns work</p>
+        <p class="elabel" id="l-b">mirrors</p>
+        <p class="elabel" id="l-c">mirrors, chat view of conversations</p>
+        <p class="elabel elabel--zone" id="l-zone">Runs locally on your machine</p>
+      </div>
+      <p class="fit__note sc-body">The two desktop products run locally. The phone app syncs over a separate authenticated channel.</p>
+    </div>
+  </section>
+
+  <!-- 7. COLOPHON: the A whole again -->
+  <section id="closing" class="close g-night" data-sc-act="flow" data-chapter="Closing" data-ground="night">
+    <div class="sc-wrap">
+      <div class="whole" id="whole" aria-hidden="true">
+        <svg class="b" viewBox="0 0 52.6 44.8"><use href="#p-body"/></svg>
+        <svg class="l" viewBox="0 0 52.6 44.8"><use href="#p-leg"/></svg>
+      </div>
+      <div data-sc-in data-sc-stagger="80">
+        <h2>Three products, in development.</h2>
+        <p class="sc-body"><span class="nb">Todo-Task</span>, <span class="nb">Agent-Roster</span> and TodoApp are all in alpha. The two desktop products run locally; the phone app syncs over a separate authenticated channel.</p>
+        <p class="sc-body">Look through each product again: <a class="run" href="#todo-task">Explore the products</a>.</p>
+        <footer class="small">
+          <p>Contact details will be added.</p>
+          <p>Alpha-AI. Illustrative page. <span class="nb">Todo-Task</span> screenshots use sample data.</p>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>
+(function () {
+  "use strict";
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var clamp = function (x, a, b) { return Math.min(b === undefined ? 1 : b, Math.max(a === undefined ? 0 : a, x)); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+
+  var peak = $("#peak"), fit = $("#fit");
+  if (reduce) {
+    // No scroll-driven travel under reduced motion: short static holds, final states.
+    // Everything is shown settled, as ordinary flow: no pinned travel, no horizontal rail.
+    [peak, fit, $("#todo-task")].forEach(function (a) { a.setAttribute("data-sc-act", "flow"); });
+    $("#todo-task [data-sc-pan]").removeAttribute("data-sc-pan");
+    $(".peak__line--end").removeAttribute("data-sc-cue");
+    $(".peak__line--start").removeAttribute("data-sc-cue");
+    $$(".peak__stage, .fit").forEach(function (e) { e.setAttribute("data-sc-verify-hold", "true"); });
+  }
+  // The rail length depends on the viewport (shot height follows vh), so its span is measured, not fixed:
+  // about 0.8 viewport-heights of scroll per viewport-height of lateral overflow, plus the pin itself.
+  var sanPham = $("#todo-task"), rail0 = $("#todo-task .rail");
+  if (!reduce) {
+    var ov = rail0.scrollWidth - innerWidth;
+    if (ov > 0) sanPham.setAttribute("data-sc-span", Math.max(2.4, ov / innerHeight * 0.8 + 1).toFixed(1));
+  }
+  ScrollCraft.mount(document.body);
+
+  var progOf = function (el) { return reduce ? 1 : (parseFloat(el.style.getPropertyValue("--sc-p")) || 0); };
+
+  /* ---- signature move: the two shards travel and stamp the A into each name */
+  var stage = $(".peak__stage"), rows = $$(".name-row"), slots = $$(".slot"), body = $(".trav--body"), leg = $(".trav--leg");
+  var geo = null;
+  var SEG = [[0.12, 0.30], [0.40, 0.56], [0.66, 0.82]];
+  var LAG = 0.04;
+  function measure() {
+    var sr = stage.getBoundingClientRect();
+    var pts = slots.map(function (s) { var r = s.getBoundingClientRect(); return { x: r.left - sr.left + r.width / 2, y: r.top - sr.top + r.height / 2, w: r.width, h: r.height }; });
+    var W = pts[0].w, H = pts[0].h;
+    var S0 = Math.min(sr.width * 0.4, sr.height * 0.46) / W;
+    geo = { W: W, H: H, S0: S0, hop: sr.height * 0.12,
+            P: [{ x: sr.width / 2, y: sr.height * 0.44, s: S0 }].concat(pts.map(function (p) { return { x: p.x, y: p.y, s: 1 }; })) };
+    [body, leg].forEach(function (e) { e.style.width = W + "px"; e.style.height = H + "px"; });
+  }
+  function place(pe, isLeg) {
+    var P = geo.P, idx = -1, i;
+    for (i = 0; i < SEG.length; i++) if (pe >= SEG[i][0]) idx = i;
+    if (idx < 0) return { x: P[0].x, y: P[0].y, s: P[0].s, r: 0, e0: 0 };
+    var u = clamp((pe - SEG[idx][0]) / (SEG[idx][1] - SEG[idx][0])), e = ease(u), a = P[idx], b = P[idx + 1], sn = Math.sin(Math.PI * u);
+    return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e) - geo.hop * sn, s: lerp(a.s, b.s, e) + 1.1 * sn,
+             r: (isLeg ? 14 : -10) * sn, e0: idx === 0 ? e : 1 };
+  }
+  var lastState = "";
+  function renderPeak(p) {
+    if (!geo) return;
+    var W = geo.W, H = geo.H, b = place(p, false), l = place(p - LAG, true);
+    var off = 1 - l.e0;
+    var ldx = 0.12 * W * l.s * off, ldy = 0.09 * W * l.s * off;
+    body.style.transform = "translate3d(" + (b.x - W / 2) + "px," + (b.y - H / 2) + "px,0) rotate(" + b.r + "deg) scale(" + b.s + ")";
+    leg.style.transform = "translate3d(" + (l.x - W / 2 + ldx) + "px," + (l.y - H / 2 + ldy) + "px,0) rotate(" + (l.r + 5 * off) + "deg) scale(" + l.s + ")";
+    var vis = clamp((p - 0.05) / 0.08), sets = 0;
+    rows.forEach(function (row, k) {
+      var lit = ease(clamp((p - (SEG[k][1] - 0.12)) / 0.07));
+      row.style.setProperty("--vis", vis.toFixed(3));
+      row.style.setProperty("--lit", lit.toFixed(3));
+      var on = (p - LAG) >= SEG[k][1];
+      slots[k].classList.toggle("is-set", on);
+      if (on) sets++;
+    });
+    var st = Math.round(b.x) + "." + Math.round(b.y) + "." + Math.round(l.x) + "." + Math.round(l.y) + "." + sets + "." + Math.round(vis * 20);
+    if (st !== lastState) { lastState = st; stage.setAttribute("data-sc-verify-state", st); }
+  }
+
+  /* ---- the diagram that draws itself, from measured node rects */
+  var plot = $("#plot"), G = null;
+  var fitStage = $("#fit [data-sc-stage]");
+  function rect(el) { var r = el.getBoundingClientRect(), o = plot.getBoundingClientRect(); return { l: r.left - o.left, t: r.top - o.top, r: r.right - o.left, b: r.bottom - o.top, w: r.width, h: r.height, cx: r.left - o.left + r.width / 2, cy: r.top - o.top + r.height / 2 }; }
+  function bez(P, t) { var m = 1 - t; return { x: m*m*m*P[0] + 3*m*m*t*P[2] + 3*m*t*t*P[4] + t*t*t*P[6], y: m*m*m*P[1] + 3*m*m*t*P[3] + 3*m*t*t*P[5] + t*t*t*P[7] }; }
+  function head(id, x, y, dx, dy) {
+    var L = Math.hypot(dx, dy) || 1; dx /= L; dy /= L; var s = 9;
+    var bx = x - dx * s, by = y - dy * s, nx = -dy * s * 0.55, ny = dx * s * 0.55;
+    $(id).setAttribute("d", "M" + x + "," + y + " L" + (bx + nx) + "," + (by + ny) + " L" + (bx - nx) + "," + (by - ny) + "Z");
+  }
+  function layoutFit() {
+    var tt = rect($("#n-tt")), ar = rect($("#n-ar")), ta = rect($("#n-ta"));
+    var side = ar.l > tt.r, paths = {};
+    if (side) {
+      paths.a = [tt.r, tt.cy, tt.r + 20, tt.cy, ar.l - 20, ar.cy, ar.l, ar.cy];
+      paths.b = [tt.cx, tt.b, tt.cx, tt.b + 40, ta.l + ta.w * 0.25, ta.t - 40, ta.l + ta.w * 0.25, ta.t];
+      paths.c = [ar.cx, ar.b, ar.cx, ar.b + 40, ta.l + ta.w * 0.75, ta.t - 40, ta.l + ta.w * 0.75, ta.t];
+    } else {
+      paths.a = [tt.cx, tt.b, tt.cx, tt.b + 14, ar.cx, ar.t - 14, ar.cx, ar.t];
+      paths.c = [ar.cx, ar.b, ar.cx, ar.b + 14, ta.cx, ta.t - 14, ta.cx, ta.t];
+      paths.b = [tt.l, tt.cy, tt.l - 34, tt.cy, ta.l - 34, ta.cy, ta.l, ta.cy];
+    }
+    G = { paths: paths };
+    ["a", "b", "c"].forEach(function (k) {
+      var P = paths[k];
+      $("#e-" + k).setAttribute("d", "M" + P[0] + "," + P[1] + " C" + P[2] + "," + P[3] + " " + P[4] + "," + P[5] + " " + P[6] + "," + P[7]);
+      head("#h-" + k, P[6], P[7], P[6] - P[4], P[7] - P[5]);
+      var m = bez(P, 0.5), lab = $("#l-" + k);
+      lab.style.left = m.x + "px"; lab.style.top = m.y + "px";
+      if (!side && k === "b") { lab.style.left = m.x + "px"; lab.style.transform = "translate(-50%,-50%) rotate(-90deg)"; lab.style.width = ""; lab.style.whiteSpace = "nowrap"; lab.style.textAlign = ""; }
+      else { lab.style.transform = ""; lab.style.width = ""; lab.style.whiteSpace = ""; lab.style.textAlign = ""; }
+    });
+    var pad = 16, top = Math.min(tt.t, ar.t) - 34, left = Math.min(tt.l, ar.l) - pad, right = Math.max(tt.r, ar.r) + pad, bottom = Math.max(tt.b, ar.b) + pad;
+    var z = $("#zone"); z.setAttribute("x", left); z.setAttribute("y", top); z.setAttribute("width", right - left); z.setAttribute("height", bottom - top);
+    var lz = $("#l-zone"); lz.style.left = (left + 14) + "px"; lz.style.top = (top + 7) + "px";
+    G.side = side;
+  }
+  var fitState = "";
+  function renderFit(p) {
+    if (!G) return;
+    var win = function (a, b) { return clamp((p - a) / (b - a)); };
+    var prog = { a: ease(win(0.08, 0.34)), b: ease(win(0.30, 0.58)), c: ease(win(0.50, 0.78)) }, zone = ease(win(0.74, 0.96));
+    ["a", "b", "c"].forEach(function (k) {
+      $("#e-" + k).style.strokeDashoffset = (1 - prog[k]).toFixed(3);
+      $("#h-" + k).style.opacity = prog[k] > 0.98 ? 1 : 0;
+      $("#l-" + k).style.opacity = clamp((prog[k] - 0.55) / 0.45).toFixed(2);
+    });
+    $("#zone").style.strokeDashoffset = (1 - zone).toFixed(3);
+    $("#l-zone").style.opacity = clamp((zone - 0.4) / 0.6).toFixed(2);
+    var st = [prog.a, prog.b, prog.c, zone].map(function (v) { return Math.round(v * 20); }).join(".");
+    if (st !== fitState) { fitState = st; fitStage.setAttribute("data-sc-verify-state", st); }
+  }
+
+  /* ---- folio: chapter and ground, hard-cut */
+  var chapters = $$("[data-chapter]"), folioCh = $("#folio-ch"), cur = null;
+  function folio() {
+    var y = 64, found = chapters[0];
+    chapters.forEach(function (c) { var r = c.getBoundingClientRect(); if (r.top <= y && r.bottom > y) found = c; });
+    if (found !== cur) { cur = found; folioCh.textContent = found.dataset.chapter; document.body.dataset.ground = found.dataset.ground; }
+  }
+
+  /* ---- colophon: shards rejoin once */
+  var whole = $("#whole");
+  if ("IntersectionObserver" in window && !reduce) {
+    new IntersectionObserver(function (es, io) { es.forEach(function (e) { if (e.isIntersecting) { whole.classList.add("is-whole"); io.disconnect(); } }); }, { threshold: 0.5 }).observe(whole);
+  } else { whole.classList.add("is-whole"); }
+
+  /* ---- intro videos: autoplay only when >50% in view and motion is not reduced; never any sound (clips are silent) */
+  var reduceNow = matchMedia("(prefers-reduced-motion: reduce)");
+  $$("video[data-intro]").forEach(function (v) {
+    var box = v.closest(".vid"), btn = $(".vid__btn", box), lab = $(".vid__lab", btn), what = btn.getAttribute("data-label");
+    var userPaused = false;
+    v.muted = true;
+    function sync() {
+      var on = !v.paused;
+      btn.setAttribute("data-state", on ? "playing" : "paused");
+      lab.textContent = on ? "Pause" : "Play";
+      btn.setAttribute("aria-label", (on ? "Pause " : "Play ") + what);
+    }
+    v.addEventListener("play", sync); v.addEventListener("pause", sync);
+    btn.addEventListener("click", function () {
+      if (v.paused) { userPaused = false; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+      else { userPaused = true; v.pause(); }
+    });
+    sync();
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.intersectionRatio >= 0.5) {
+            if (!userPaused && !reduceNow.matches && v.paused) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+          } else if (!v.paused) { v.pause(); }
+        });
+      }, { threshold: [0, 0.5, 1] }).observe(v);
+    }
+  });
+
+  function layout() { measure(); layoutFit(); lastState = ""; fitState = ""; tick(true); }
+  var lastP = -1, lastF = -1, lastY = -1;
+  function tick(force) {
+    var p = progOf(peak), f = progOf(fit);
+    if (force || p !== lastP) { lastP = p; renderPeak(p); }
+    if (force || f !== lastF) { lastF = f; renderFit(f); }
+    if (force || scrollY !== lastY) { lastY = scrollY; folio(); }
+  }
+  function loop() { tick(false); requestAnimationFrame(loop); }
+  addEventListener("resize", layout);
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () { layout(); if (!reduce) requestAnimationFrame(loop); else { tick(true); addEventListener("scroll", folio, { passive: true }); } });
+})();
+</script>
+</body>
+</html>
